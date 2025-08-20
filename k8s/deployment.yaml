@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmdb-web
+  labels:
+    app: vmdb-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vmdb-web
+  template:
+    metadata:
+      labels:
+        app: vmdb-web
+    spec:
+      containers:
+      - name: web
+        image: ghcr.io/your-org/vmdb-web:1.0.0 # <-- update to your image
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - secretRef:
+            name: pg-credentials
+        env:
+        - name: DB_NAME
+          value: "vmdb"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_POOL_SIZE
+          value: "10"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"

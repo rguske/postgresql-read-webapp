@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+  <form class="row gy-2 gx-3 align-items-center mb-3" method="get" action="/">
+    <div class="col-auto">
+      <label class="form-label" for="limit">Rows</label>
+      <input type="number" class="form-control" name="limit" id="limit" min="1" max="10000" value="{{ limit }}" />
+    </div>
+    <div class="col-auto align-self-end">
+      <button class="btn btn-primary" type="submit">Reload</button>
+      <a class="btn btn-outline-secondary" href="/api/virtual-machines?limit={{ limit }}">JSON</a>
+    </div>
+  </form>
+
+  <div class="table-responsive mb-4">
+    <table class="table table-sm table-hover align-middle">
+      <thead>
+        <tr>
+          {% for c in columns %}
+            <th scope="col">{{ c }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+          <tr>
+            {% for v in r %}
+              <td>{{ v }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Centered image below the table -->
+  <div class="text-center my-4">
+    <img src="/static/vm.png" alt="VM logo" class="img-fluid" style="max-height:800px;">
+  </div>
+{% endblock %}
