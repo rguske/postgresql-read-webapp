@@ -104,7 +104,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: quay.io/rguske/psql-read-webapp:v1.0 # your image reference
+        image: quay.io/rguske/psql-read-webapp:v1.1 # your image reference
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
@@ -169,7 +169,7 @@ oc adm policy add-scc-to-user anyuid -z default -n $NAMESPACE
 
 ```code
 kn service create postgresql-read-webapp \
-  --image=quay.io/rguske/psql-read-webapp:v1.0 \
+  --image=quay.io/rguske/psql-read-webapp:v1.1 \
   --env-from secret:pg-credentials \
   --env DB_NAME=vmdb \
   --env DB_PORT=5432 \
